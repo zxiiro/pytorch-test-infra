@@ -105,9 +105,15 @@ jobs:
       SCRIPT: ${{ inputs.script }}
     runs-on: ${{ inputs.runner }}
     container:
-      image: ${{ inputs.docker-image }}
+      #image: ${{ inputs.docker-image }}
+      image: ubuntu:latest
       options: --user 0
     steps:
+      - name: Test sudo
+        run: |
+          id
+          apt-get update -y && apt-get install -y sudo git nodejs
+          sudo ls /
       - name: Clean workspace
         env:
           NO_SUDO: ${{ inputs.no-sudo }}
