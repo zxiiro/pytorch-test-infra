@@ -88,7 +88,7 @@ runs:
 
                   if [ "$HAS_NVIDIA_DRIVER" -eq 0 ]; then
                       # CAUTION: this may need to be updated in future
-                      if [ "${DISTRIBUTION}" != ubuntu20.04 ]; then
+                      if [ "${DISTRIBUTION}" != ubuntu20.04 ] && [ "${DISTRIBUTION}" != ubuntu22.04 ]; then
                             sudo yum groupinstall -y "Development Tools"
                             # ensure our kernel install is the same as our underlying kernel,
                             # groupinstall "Development Tools" has a habit of mismatching kernel headers
@@ -209,6 +209,14 @@ runs:
               )
           }
 
+          install_nvidia_driver_ubuntu22() {
+              (
+                  set -x
+                  install_nvidia_driver_common
+                  post_install_nvidia_driver_common
+              )
+          }
+
           echo "== Installing nvidia driver ${DRIVER_FN} =="
           case "${DISTRIBUTION}" in
               amzn*)
@@ -216,6 +224,9 @@ runs:
                   ;;
               ubuntu20.04)
                   install_nvidia_driver_ubuntu20
+                  ;;
+              ubuntu22.04)
+                  install_nvidia_driver_ubuntu22
                   ;;
               *)
                   echo "ERROR: Unknown distribution ${DISTRIBUTION}"
@@ -231,6 +242,9 @@ runs:
                   ;;
               ubuntu20.04)
                   install_nvidia_docker2_ubuntu20
+                  ;;
+              ubuntu22.04)
+                  echo "HERE"
                   ;;
               *)
                   echo "ERROR: Unknown distribution ${DISTRIBUTION}"
